@@ -45,7 +45,7 @@ module Globalize
       def where_values_hash(*args)
         equalities = respond_to?(:with_default_scope) ? with_default_scope.where_values : where_values
         equalities = equalities.grep(Arel::Nodes::Equality).find_all { |node|
-          node.left.relation.name == translations_table_name
+          respond_to?(:translated_column_name) && node.left.relation.name == translations_table_name
         }
 
         binds = Hash[bind_values.find_all(&:first).map { |column, v| [column.name, v] }]
